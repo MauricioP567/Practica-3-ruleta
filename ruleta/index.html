@@ -3,128 +3,48 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Practica Calificada 3 — Aula Virtual</title>
+    <title>Aula Virtual — Ruleta</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <!-- Navegación principal entre ambas preguntas -->
-    <nav class="navegacion-principal">
-      <button id="navRuleta" class="btn-nav activo">1. Ruleta Virtual</button>
-      <button id="navSorteo" class="btn-nav">2. Sorteo de Equipos</button>
-    </nav>
-
     <div class="contenedor">
-      <!-- ================= SECCIÓN 1: RULETA ================= -->
-      <section id="seccionRuleta" class="vista-seccion activa">
-        <div class="barra-superior">
-          <div class="respuesta" id="respuesta">RESPUESTA</div>
-          <button class="btn-iniciar" id="botonIniciar">Iniciar</button>
-          <button class="btn-reiniciar" id="botonReiniciar">Reiniciar</button>
+      <!-- Barra superior -->
+      <div class="barra-superior">
+        <div class="respuesta" id="respuesta">RESPUESTA</div>
+        <button class="btn-iniciar" id="botonIniciar">Iniciar</button>
+        <button class="btn-reiniciar" id="botonReiniciar">Reiniciar</button>
+      </div>
+
+      <div class="zona-principal">
+        <!-- Ruleta -->
+        <div class="zona-ruleta">
+          <canvas id="lienzoRuleta" width="420" height="420"></canvas>
+          <div class="indicador"></div>
+          <div class="boton-centro">haz clic para girarlo</div>
         </div>
 
-        <div class="zona-principal">
-          <div class="zona-ruleta">
-            <canvas id="lienzoRuleta" width="420" height="420"></canvas>
-            <div class="indicador"></div>
-            <div class="boton-centro">haz clic para girarlo</div>
+        <!-- Panel derecho -->
+        <div class="panel-derecho">
+          <textarea
+            id="areaElementos"
+            placeholder="Escribe un elemento por línea"
+          ></textarea>
+          <div class="fila-controles">
+            <button id="botonTitulo">Título</button>
+            <button id="botonEditar">Editar</button>
+            <button id="botonEsconder">esconder…</button>
           </div>
-
-          <div class="panel-derecho">
-            <textarea
-              id="areaElementos"
-              placeholder="Escribe un elemento por línea"
-            ></textarea>
-            <div class="fila-controles">
-              <button id="botonTitulo">Título</button>
-              <button id="botonEditar">Editar</button>
-              <button id="botonEsconder">esconder…</button>
+          <div class="ayuda-teclas">
+            <div><span class="tecla">SPACE</span> Gíralo</div>
+            <div>
+              <span class="tecla">S</span> Ocultar el elemento seleccionado
             </div>
-            <div class="ayuda-teclas">
-              <div><span class="tecla">SPACE</span> Gíralo</div>
-              <div>
-                <span class="tecla">S</span> Ocultar el elemento seleccionado
-              </div>
-              <div><span class="tecla">R</span> Reiniciar</div>
-              <div><span class="tecla">E</span> Editar</div>
-              <div><span class="tecla">F</span> Pantalla completa</div>
-            </div>
+            <div><span class="tecla">R</span> Reiniciar</div>
+            <div><span class="tecla">E</span> Editar</div>
+            <div><span class="tecla">F</span> Pantalla completa</div>
           </div>
         </div>
-      </section>
-
-      <!-- ================= SECCIÓN 2: SORTEO DE EQUIPOS ================= -->
-      <section id="seccionSorteo" class="vista-seccion">
-        <!-- Pantalla 1: Configuración -->
-        <div id="pantallaConfig">
-          <h1>Crea equipos al azar a partir de una lista de nombres.</h1>
-          <div class="grid-config">
-            <div class="columna">
-              <p class="encabezado-pequeno">1. Ingresa los participantes</p>
-              <textarea
-                id="areaParticipantes"
-                placeholder="Cada participante debe estar en una nueva línea"
-                maxlength="5000"
-              ></textarea>
-              <div class="contador">
-                <span id="contadorParticipantes">0</span>
-              </div>
-              <p class="nota">
-                Máximo 100 participantes, hasta 50 caracteres cada uno.
-              </p>
-            </div>
-
-            <div class="columna">
-              <p class="encabezado-pequeno">2. Cómo dividir:</p>
-              <div class="opciones-radio">
-                <label>
-                  <input type="radio" name="modo" value="equipos" checked />
-                  Cantidad de equipos
-                </label>
-                <label>
-                  <input type="radio" name="modo" value="porEquipo" />
-                  Participantes por equipo
-                </label>
-              </div>
-              <select id="selectorCantidad"></select>
-
-              <p class="encabezado-pequeno" style="margin-top: 1rem">
-                3. Título
-              </p>
-              <input
-                type="text"
-                id="campoTitulo"
-                placeholder="Copa del Mundo Qatar 2022"
-              />
-
-              <div class="fila-botones">
-                <button class="btn-limpiar" id="botonLimpiar">Limpiar</button>
-                <button class="btn-generar" id="botonGenerar">
-                  Generar equipos
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Pantalla 2: Resultados -->
-        <div id="pantallaResultados" style="display: none">
-          <h2 class="titulo-resultados" id="tituloResultados">Equipos</h2>
-          <div class="grid-equipos" id="gridEquipos"></div>
-
-          <div class="fila-botones-resultado">
-            <button class="btn-accion" id="botonDescargar">
-              Descargar JPG
-            </button>
-            <button class="btn-accion" id="botonCopiar">
-              Copiar al portapapeles
-            </button>
-            <button class="btn-accion" id="botonCopiarColumnas">
-              Copiar por columnas
-            </button>
-            <button class="btn-volver" id="botonVolver">← Volver</button>
-          </div>
-        </div>
-      </section>
+      </div>
     </div>
 
     <script src="script.js"></script>

@@ -14,33 +14,7 @@ body {
   margin: 0 auto;
 }
 
-/* Navegación por pestañas */
-.navegacion-principal {
-  display: flex;
-  gap: 0.5rem;
-  max-width: 1000px;
-  margin: 0 auto 1rem auto;
-}
-.btn-nav {
-  padding: 0.6rem 1.2rem;
-  background: #ddd;
-  border: none;
-  border-radius: 6px 6px 0 0;
-  font-weight: bold;
-  cursor: pointer;
-}
-.btn-nav.activo {
-  background: #2d8cff;
-  color: #fff;
-}
-.vista-seccion {
-  display: none;
-}
-.vista-seccion.activa {
-  display: block;
-}
-
-/* ===== RULETA ===== */
+/* Barra superior: respuesta + botones */
 .barra-superior {
   display: flex;
   gap: 0.75rem;
@@ -77,6 +51,7 @@ button {
   color: #fff;
 }
 
+/* Zona principal: ruleta + panel */
 .zona-principal {
   display: flex;
   gap: 1.5rem;
@@ -92,6 +67,7 @@ canvas {
   display: block;
 }
 
+/* Triángulo rojo indicador */
 .indicador {
   position: absolute;
   top: 50%;
@@ -104,6 +80,7 @@ canvas {
   border-right: 26px solid #e0002b;
   z-index: 5;
 }
+/* Botón central de la ruleta */
 .boton-centro {
   position: absolute;
   top: 50%;
@@ -162,97 +139,4 @@ textarea {
   font-family: monospace;
   font-weight: bold;
   margin-right: 0.4rem;
-}
-
-/* ===== SORTEO DE EQUIPOS ===== */
-.grid-config {
-  display: flex;
-  gap: 2rem;
-  margin-top: 1rem;
-  flex-wrap: wrap;
-}
-.columna {
-  flex: 1;
-  min-width: 280px;
-}
-.encabezado-pequeno {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-}
-.contador {
-  text-align: right;
-  font-size: 0.85rem;
-  color: #666;
-}
-.nota {
-  font-size: 0.8rem;
-  color: #777;
-  margin-top: 0.25rem;
-}
-.opciones-radio {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 0.75rem;
-}
-select,
-input[type="text"] {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  margin-bottom: 0.75rem;
-}
-.fila-botones {
-  display: flex;
-  justify-content: flex-end;
-  gap: 0.5rem;
-  margin-top: 1rem;
-}
-.btn-limpiar {
-  background: #eee;
-  color: #333;
-}
-.btn-generar {
-  background: #d81b60;
-  color: #fff;
-}
-
-.grid-equipos {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1rem;
-  margin: 1.5rem 0;
-}
-.tarjeta-equipo {
-  border: 2px solid #2d8cff;
-  border-radius: 6px;
-  background: #fff;
-  padding: 1rem;
-}
-.tarjeta-equipo h3 {
-  border-bottom: 1px solid #eee;
-  padding-bottom: 0.5rem;
-  margin-bottom: 0.5rem;
-  color: #2d8cff;
-}
-.tarjeta-equipo ul {
-  list-style: none;
-}
-.tarjeta-equipo li {
-  padding: 0.25rem 0;
-  font-size: 0.9rem;
-}
-.fila-botones-resultado {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-.btn-accion {
-  background: #2d8cff;
-  color: #fff;
-}
-.btn-volver {
-  background: #888;
-  color: #fff;
 }
