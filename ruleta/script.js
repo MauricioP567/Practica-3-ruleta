@@ -1,0 +1,205 @@
+// ====== VARIABLES GLOBALES ======
+const lienzo = document.getElementById("lienzoRuleta");
+const contexto = lienzo.getContext("2d");
+const areaElementos = document.getElementById("areaElementos");
+const cajaRespuesta = document.getElementById("respuesta");
+
+const coloresBasicos = ["#e74c3c", "#3498db", "#2ecc71", "#f1c40f", "#9b59b6"];
+const radio = lienzo.width / 2;
+
+let listaElementos = []; // Todos los elementos del textarea
+let elementosOcultos = []; // Elementos ocultos para el sorteo
+let anguloActual = 0; // Rotación actual
+let estaGirando = false;
+let ultimoSeleccionado = "";
+
+// ====== LOCAL STORAGE ======
+function recuperarDatos() {
+  const guardado = localStorage.getItem("elementosRuleta");
+  areaElementos.value =
+    guardado !== null ? guardado : "1\n2\n3\n4\n5\n6\n7\n8\n9\n10\n11\n12";
+  actualizarListaDesdeTexto();
+}
+
+function guardarDatos() {
+  localStorage.setItem("elementosRuleta", areaElementos.value);
+}
+
+// ====== ACTUALIZAR LISTA Y REDIBUJAR ======
+function actualizarListaDesdeTexto() {
+  listaElementos = areaElementos.value
+    .split("\n")
+    .map((linea) => linea.trim())
+    .filter((linea) => linea.length > 0);
+  dibujarRuleta();
+}
+
+function obtenerElementosActivos() {
+  return listaElementos.filter((el) => !elementosOcultos.includes(el));
+}
+
+// ====== DIBUJAR RULETA ======
+function dibujarRuleta() {
+  const activos = obtenerElementosActivos();
+  contexto.clearRect(0, 0, lienzo.width, lienzo.height);
+
+  if (activos.length === 0) {
+    contexto.beginPath();
+    contexto.arc(radio, radio, radio - 2, 0, 2 * Math.PI);
+    contexto.fillStyle = "#ddd";
+    contexto.fill();
+    return;
+  }
+
+  const anguloPorSector = (2 * Math.PI) / activos.length;
+
+  activos.forEach((elemento, indice) => {
+    const anguloInicio = anguloActual + indice * anguloPorSector;
+    const anguloFin = anguloInicio + anguloPorSector;
+
+    // sector
+    contexto.beginPath();
+    contexto.moveTo(radio, radio);
+    contexto.arc(radio, radio, radio - 2, anguloInicio, anguloFin);
+    contexto.closePath();
+    contexto.fillStyle = coloresBasicos[indice % coloresBasicos.length];
+    contexto.fill();
+    contexto.strokeStyle = "#fff";
+    contexto.lineWidth = 2;
+    contexto.stroke();
+
+    // texto
+    contexto.save();
+    contexto.translate(radio, radio);
+    contexto.rotate(anguloInicio + anguloPorSector / 2);
+    contexto.textAlign = "right";
+    contexto.fillStyle = "#222";
+    contexto.font = "bold 20px Arial";
+    contexto.fillText(elemento, radio - 20, 8);
+    contexto.restore();
+  });
+}
+
+// ====== CALCULAR ELEMENTO SELECCIONADO ======
+function calcularSeleccionado() {
+  const activos = obtenerElementosActivos();
+  if (activos.length === 0) return "";
+  const anguloPorSector = (2 * Math.PI) / activos.length;
+  let anguloNormalizado = anguloActual % (2 * Math.PI);
+  if (anguloNormalizado < 0) anguloNormalizado += 2 * Math.PI;
+  const indice = Math.floor(
+    ((2 * Math.PI - anguloNormalizado) % (2 * Math.PI)) / anguloPorSector,
+  );
+  return activos[indice];
+}
+
+// ====== GIRAR RULETA ======
+function girarRuleta() {
+  if (estaGirando) return;
+  const activos = obtenerElementosActivos();
+  if (activos.length === 0) return;
+
+  estaGirando = true;
+  const vueltasExtra = 5 + Math.random() * 5;
+  const anguloFinal = anguloActual + vueltasExtra * 2 * Math.PI;
+  const anguloInicial = anguloActual;
+  const duracion = 4000;
+  const tiempoInicio = performance.now();
+
+  function animar(tiempoActual) {
+    const transcurrido = tiempoActual - tiempoInicio;
+    const progreso = Math.min(transcurrido / duracion, 1);
+    const suavizado = 1 - Math.pow(1 - progreso, 3);
+    anguloActual = anguloInicial + (anguloFinal - anguloInicial) * suavizado;
+    dibujarRuleta();
+
+    if (progreso < 1) {
+      requestAnimationFrame(animar);
+    } else {
+      estaGirando = false;
+      ultimoSeleccionado = calcularSeleccionado();
+      cajaRespuesta.textContent = ultimoSeleccionado;
+    }
+  }
+  requestAnimationFrame(animar);
+}
+
+// ====== OCULTAR SELECCIONADO ======
+function ocultarSeleccionado() {
+  if (!ultimoSeleccionado) return;
+  if (!elementosOcultos.includes(ultimoSeleccionado)) {
+    elementosOcultos.push(ultimoSeleccionado);
+  }
+  resaltarEnTextarea(ultimoSeleccionado);
+  dibujarRuleta();
+}
+
+function resaltarEnTextarea(texto) {
+  const contenido = areaElementos.value;
+  const inicio = contenido.indexOf(texto);
+  if (inicio >= 0) {
+    areaElementos.focus();
+    areaElementos.setSelectionRange(inicio, inicio + texto.length);
+  }
+}
+
+// ====== REINICIAR ======
+function reiniciar() {
+  elementosOcultos = [];
+  ultimoSeleccionado = "";
+  cajaRespuesta.textContent = "RESPUESTA";
+  dibujarRuleta();
+}
+
+// ====== PANTALLA COMPLETA ======
+function alternarPantallaCompleta() {
+  if (!document.fullscreenElement) {
+    document.documentElement.requestFullscreen();
+  } else {
+    document.exitFullscreen();
+  }
+}
+
+// ====== EVENTOS ======
+lienzo.addEventListener("click", girarRuleta);
+document.getElementById("botonIniciar").addEventListener("click", girarRuleta);
+document.getElementById("botonReiniciar").addEventListener("click", reiniciar);
+
+areaElementos.addEventListener("input", function () {
+  guardarDatos();
+  actualizarListaDesdeTexto();
+});
+
+document
+  .getElementById("botonEditar")
+  .addEventListener("click", () => areaElementos.focus());
+document
+  .getElementById("botonEsconder")
+  .addEventListener("click", ocultarSeleccionado);
+document.getElementById("botonTitulo").addEventListener("click", function () {
+  const titulo = prompt("Título de la ruleta:");
+  if (titulo) cajaRespuesta.textContent = titulo;
+});
+
+document.addEventListener("keydown", function (evento) {
+  const escribiendo = document.activeElement === areaElementos;
+
+  if (evento.code === "Space" && !escribiendo) {
+    evento.preventDefault();
+    girarRuleta();
+  } else if ((evento.key === "s" || evento.key === "S") && !escribiendo) {
+    ocultarSeleccionado();
+  } else if ((evento.key === "r" || evento.key === "R") && !escribiendo) {
+    reiniciar();
+  } else if (evento.key === "e" || evento.key === "E") {
+    if (!escribiendo) {
+      evento.preventDefault();
+      areaElementos.focus();
+    }
+  } else if ((evento.key === "f" || evento.key === "F") && !escribiendo) {
+    alternarPantallaCompleta();
+  }
+});
+
+// ====== INICIO ======
+recuperarDatos();
