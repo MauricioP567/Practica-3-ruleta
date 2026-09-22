@@ -120,3 +120,65 @@ button {
   color: #888;
   margin-top: 0.75rem;
 }
+/* ============ PANTALLA DE RESULTADOS Y TARJETAS DE EQUIPO ============ */
+#pantallaResultados {
+  display: none;
+}
+
+.titulo-resultados {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.grid-equipos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.equipo {
+  border: 2px solid #c0286b;
+  border-radius: 10px;
+  padding: 1rem;
+  min-width: 180px;
+  flex: 1;
+  max-width: 220px;
+}
+
+.equipo h3 {
+  text-align: center;
+  color: #c0286b;
+  margin-bottom: 0.75rem;
+  font-size: 1rem;
+}
+
+.equipo ul {
+  list-style: none;
+}
+
+.equipo li {
+  padding: 0.4rem 0.5rem;
+  background: #faf0f5;
+  border-radius: 5px;
+  margin-bottom: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.fila-botones-resultado {
+  display: flex;
+  gap: 0.75rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn-accion {
+  background: #444;
+  color: #fff;
+}
+
+.btn-volver {
+  background: #eee;
+  color: #333;
+}
