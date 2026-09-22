@@ -8,8 +8,34 @@
   </head>
 
   <body>
-    <div class="contenedor"></div>
+    <div class="contenedor">
+      <!-- ========== PANTALLA 1: CONFIGURACIÓN ========== -->
+      <div id="pantallaConfig">
+        <h1>Crea equipos al azar a partir de una lista de nombres.</h1>
 
-    <script src="script.js"></script>
+        <div class="grid-config">
+          <!-- Columna izquierda: participantes -->
+          <div class="columna">
+            <p class="encabezado-pequeno">1. Ingresa los participantes</p>
+
+            <textarea
+              id="areaParticipantes"
+              placeholder="Cada participante debe estar en una nueva línea"
+              maxlength="5000"
+            ></textarea>
+
+            <div class="contador">
+              <span id="contadorParticipantes">0</span>
+            </div>
+
+            <p class="nota">
+              Máximo 100 participantes, hasta 50 caracteres cada uno.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <script src="script.js"></script>
+    </div>
   </body>
 </html>
